@@ -41,9 +41,12 @@ func udpserv(hub *Hub) {
 		go sendResponse(ser, remoteaddr)
 
 		// send message to hub as broadcast
-		// seems to work but how can i trim "unused stuff" from udpclient?
-
+		// Hi UDP Server, How are you doing?
 		message = bytes.TrimSpace(bytes.Replace(message, cr, sp, -1))
+
+		// seems to work but how can i trim "unused stuff" from udpclient?
+		// with Trim all Null-Characters
+		message = bytes.Trim(message, "\x00")
 		hub.broadcast <- message
 
 	}
