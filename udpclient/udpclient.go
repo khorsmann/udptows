@@ -3,15 +3,19 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"net"
 	"time"
 )
 
+var uaddr = flag.String("uaddr", "127.0.0.1:29000", "udp target service address")
+
 func main() {
+	flag.Parse()
 	p := make([]byte, 256)
 
-	conn, err := net.Dial("udp", "127.0.0.1:1234")
+	conn, err := net.Dial("udp", *uaddr)
 	if err != nil {
 		fmt.Printf("Some error %v", err)
 		return
