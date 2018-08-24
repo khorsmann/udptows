@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"log"
 	"net"
+	"strconv"
 )
 
 // how can i use vars from client.go?
@@ -20,11 +21,20 @@ func sendResponse(conn *net.UDPConn, addr *net.UDPAddr) {
 	}
 }
 
-func udpserv(hub *Hub) {
+func udpserv(uaddr string, hub *Hub) {
 	message := make([]byte, 256)
+
+	host, ports, err := net.SplitHostPort(uaddr)
+	if err != nil {
+		log.Fatal("UDP uaddr config string wrong: ", err)
+	}
+	port, err := strconv.Atoi(ports)
+	if err != nil {
+		log.Fatal("UDP uaddr port config wrong: ", err)
+	}
 	addr := net.UDPAddr{
-		Port: 1234,
-		IP:   net.ParseIP("127.0.0.1"),
+		Port: port,
+		IP:   net.ParseIP(host),
 	}
 	ser, err := net.ListenUDP("udp", &addr)
 	if err != nil {
